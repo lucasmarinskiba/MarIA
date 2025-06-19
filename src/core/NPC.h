@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "utils/ResourceManager.h"
+#include "core/AnimatedSprite.h"
 
 class NPC {
 public:
