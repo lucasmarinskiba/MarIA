@@ -25,3 +25,31 @@ std::string NPC::interact() {
     currentDialogue = (currentDialogue + 1) % dialogues.size();
     return dialogues[currentDialogue];
 }
+
+void NPC::init(const sf::Texture& tex, const sf::Vector2f& pos, const std::vector<std::string>& d) {
+    setTexture(tex, 64, 64, 4, 0.22f);
+    setPosition(pos);
+    dialogues = d;
+    currentDialogue = 0;
+}
+
+void NPC::save(std::ofstream& out) const {
+    auto pos = getPosition();
+    out << pos.x << ' ' << pos.y << ' ' << currentDialogue << ' ' << dialogues.size() << '\n';
+    for (const auto& s : dialogues) out << s << '\n';
+}
+
+void NPC::load(std::ifstream& in, const sf::Texture& tex) {
+    float x, y; size_t idx, count;
+    in >> x >> y >> idx >> count;
+    setTexture(tex, 64, 64, 4, 0.22f);
+    setPosition({x, y});
+    currentDialogue = idx;
+    dialogues.clear();
+    in.ignore();
+    for (size_t i = 0; i < count; ++i) {
+        std::string line;
+        std::getline(in, line);
+        dialogues.push_back(line);
+    }
+}
