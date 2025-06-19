@@ -1,11 +1,15 @@
 #include "AnimatedSprite.h"
 
-AnimatedSprite::AnimatedSprite() : frameWidth(0), frameHeight(0), frameCount(1), frameTime(0.1f) {}
+AnimatedSprite::AnimatedSprite() {}
 
 void AnimatedSprite::setTexture(const sf::Texture& texture, int fw, int fh, int fc, float ft) {
     sprite.setTexture(texture);
-    frameWidth = fw; frameHeight = fh; frameCount = fc; frameTime = ft;
-    sprite.setTextureRect(sf::IntRect(0,0,frameWidth,frameHeight));
+    frameWidth = fw;
+    frameHeight = fh;
+    frameCount = fc;
+    frameTime = ft;
+    currentFrame = 0;
+    sprite.setTextureRect(sf::IntRect(0, 0, frameWidth, frameHeight));
 }
 
 void AnimatedSprite::setPosition(const sf::Vector2f& p) {
@@ -19,6 +23,14 @@ void AnimatedSprite::update(float dt) {
         sprite.setTextureRect(sf::IntRect(frameWidth * currentFrame, 0, frameWidth, frameHeight));
         timeSinceLast = 0.f;
     }
+}
+
+sf::Vector2f AnimatedSprite::getPosition() const {
+    return sprite.getPosition();
+}
+
+void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    target.draw(sprite, states);
 }
 
 
