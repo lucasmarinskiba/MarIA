@@ -11,7 +11,7 @@ struct Quest {
 
     // Para guardar/cargar:
     void save(std::ofstream& out) const;
-    void load(std::ifstream& in
+    void load(std::ifstream& in);
 };
 
 class QuestSystem {
