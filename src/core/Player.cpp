@@ -28,3 +28,14 @@ void Player::draw(sf::RenderWindow& window) {
 sf::Vector2f Player::getPosition() const {
     return sprite.getPosition();
 }
+
+void Player::save(std::ofstream& out) const {
+    auto pos = getPosition();
+    out << pos.x << ' ' << pos.y << ' ' << health << ' ' << faith << '\n';
+}
+
+void Player::load(std::ifstream& in) {
+    float x, y;
+    in >> x >> y >> health >> faith;
+    setPosition({x, y});
+}
