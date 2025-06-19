@@ -11,6 +11,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Maria Game SFML");
     window.setFramerateLimit(60);
 
+    GameState state = GameState::MENU;
+    
     ResourceManager rm;
     sf::Font font = rm.loadFont("assets/fonts/pixel.ttf");
 
