@@ -1,8 +1,10 @@
 #include "Player.h"
+#include <SFML/Window/Keyboard.hpp>
 
 Player::Player(ResourceManager& rm) {
-    sprite.setTexture(rm.loadTexture("assets/textures/player.png"));
-    sprite.setPosition(100, 400);
+    const sf::Texture& tex = rm.loadTexture("assets/textures/player_sheet.png");
+    setTexture(tex, 64, 64, 4, 0.14f); // 4 frames, 0.14s por frame
+    setPosition({100, 400});
 }
 
 void Player::update(float dt) {
@@ -11,7 +13,12 @@ void Player::update(float dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) movement.y += speed * dt;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) movement.x -= speed * dt;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) movement.x += speed * dt;
-    sprite.move(movement);
+    setPosition(getPosition() + movement);
+
+    // Solo animar cuando el jugador se mueve
+    if (movement.x != 0 || movement.y != 0)
+        AnimatedSprite::update(dt);
+    
 }
 
 void Player::draw(sf::RenderWindow& window) {
