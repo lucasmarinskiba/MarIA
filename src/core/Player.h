@@ -27,7 +27,8 @@ private:
 class Player : public AnimatedSprite {
 public:
     Player(ResourceManager& rm);
-
+    void save(std::ofstream& out) const;
+    void load(std::ifstream& in);
     void update(float dt);
     // ... tus getters/setters y stats ...
 
