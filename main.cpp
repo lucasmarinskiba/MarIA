@@ -2,30 +2,33 @@
 #include <SFML/Audio.hpp>
 #include "utils/ResourceManager.h"
 #include "core/Player.h"
-#include "core/NPC.h"
 #include "core/Enemy.h"
+#include "core/NPC.h"
 #include "core/Level.h"
-#include "core/CombatSystem.h"
 #include "core/QuestSystem.h"
-#include "ui/HUD.h"
+#include "core/SaveSystem.h"
 #include "ui/Menu.h"
+#include "ui/HUD.h"
 #include "ui/GameOverScreen.h"
 #include "ui/OptionsMenu.h"
 #include "ui/QuestHUD.h"
 #include "ui/QuestSelector.h"
 #include "core/GameState.h"
-#include "core/SaveSystem.h"
+
+// Utilidad para crear diálogos de NPCs
+std::vector<std::string> getDefaultDialogues() {
+    return {"¡Hola!", "¡Buen trabajo!", "¡Chau!"};
+}
 
 int main() {
-    // --- Inicialización de recursos y ventana ---
-    ResourceManager rm;
-    sf::Font font = rm.loadFont("assets/fonts/pixel.ttf");
+    // --- Inicialización de SFML y recursos ---
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Maria Game SFML");
     window.setFramerateLimit(60);
     ResourceManager rm;
     sf::Clock clock;
-    
-    // --- Menús y pantallas ---
+
+    // --- Carga de fuentes y menús ---
+    sf::Font font = rm.loadFont("assets/fonts/pixel.ttf");
     Menu menu(font);
     GameOverScreen gameOverScreen(font);
     OptionsMenu optionsMenu(font);
@@ -33,35 +36,39 @@ int main() {
     // --- Estados del juego ---
     GameState state = GameState::MENU;
 
-    // --- Jugador, enemigos, combate, NPCs, nivel ---
-    Player player(rm);
-    CombatSystem combat;
+    // --- Texturas para sprites animados ---
+    sf::Texture& playerTex = rm.loadTexture("assets/textures/player_sheet.png");
     sf::Texture& enemyTex = rm.loadTexture("assets/textures/enemy_sheet.png");
+    sf::Texture& npcTex   = rm.loadTexture("assets/textures/npc_sheet.png");
+
+    // --- Inicialización del jugador ---
+    Player player(rm);
+    player.setTexture(playerTex, 64, 64, 4, 0.13f); // 4 frames animación
+    player.setPosition({100, 400});
+
+    // --- Inicialización de enemigos animados ---
     std::vector<Enemy> enemies;
     enemies.emplace_back(); enemies.back().init(enemyTex, {700, 400});
-    combat.addEnemy(Enemy(enemyTex, {700, 400}));
-    combat.addEnemy(Enemy(enemyTex, {900, 500}));
-    std::vector<NPC> npcs = { NPC(rm, {400, 400}, {"¡Buen trabajo derrotando enemigos!"}) };
-    Level level(rm);
+    enemies.emplace_back(); enemies.back().init(enemyTex, {900, 500});
 
-    sf::Texture& npcTex = rm.loadTexture("assets/textures/npc_sheet.png");
+    // --- Inicialización de NPCs animados ---
     std::vector<NPC> npcs;
-    npcs.emplace_back(); npcs.back().init(npcTex, {400, 400}, {"¡Hola!", "¡Chau!"});
+    npcs.emplace_back(); npcs.back().init(npcTex, {400, 400}, getDefaultDialogues());
 
-    // --- Misiones y selector ---
+    // --- Inicialización de misiones y selector ---
     QuestSystem questSystem;
     questSystem.addQuest(
         "Derrota a todos los enemigos",
         "Acaba con todos los enemigos en pantalla.",
-        [&combat]() {
-            for (const auto& e : combat.getEnemies())
+        [&enemies]() {
+            for (const auto& e : enemies)
                 if (e.isAlive()) return false;
             return true;
         }
     );
     QuestSelector questSelector(font, questSystem);
 
-    // --- Guardado/Carga ---
+    // --- Guardado/Carga y notificaciones ---
     bool showSaveNotice = false, showLoadNotice = false;
     sf::Clock noticeClock;
 
@@ -71,12 +78,13 @@ int main() {
 
     // --- Bucle principal ---
     while (window.isOpen()) {
+        // --- Manejo de eventos (input del usuario) ---
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            // --- Menú principal ---
+            // Menú principal
             if (state == GameState::MENU) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Enter)
@@ -84,7 +92,7 @@ int main() {
                     else if (event.key.code == sf::Keyboard::O)
                         state = GameState::OPTIONS;
                     else if (event.key.code == sf::Keyboard::L) {
-                        if (SaveSystem::load(player)) {
+                        if (SaveSystem::load(player, enemies, enemyTex, npcs, npcTex, questSystem)) {
                             showLoadNotice = true;
                             noticeClock.restart();
                         }
@@ -92,7 +100,7 @@ int main() {
                 }
             }
 
-            // --- Opciones ---
+            // Opciones gráficas
             else if (state == GameState::OPTIONS) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Escape)
@@ -104,18 +112,18 @@ int main() {
                 }
             }
 
-            // --- Pausa y salida ---
+            // Juego en curso (jugar)
             else if (state == GameState::PLAYING) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Escape)
                         state = GameState::PAUSED;
                     else if (event.key.code == sf::Keyboard::S) {
-                        SaveSystem::save(player);
+                        SaveSystem::save(player, enemies, npcs, questSystem);
                         showSaveNotice = true;
                         noticeClock.restart();
                     }
                     else if (event.key.code == sf::Keyboard::L) {
-                        if (SaveSystem::load(player)) {
+                        if (SaveSystem::load(player, enemies, enemyTex, npcs, npcTex, questSystem)) {
                             showLoadNotice = true;
                             noticeClock.restart();
                         }
@@ -124,19 +132,28 @@ int main() {
                         state = GameState::SELECT_QUEST;
                     }
                 }
-                // --- Interacción con NPCs ---
+                // Interacción con NPCs
                 if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E) {
                     for (auto& npc : npcs) {
+                        // Suponiendo que tienes canInteract y interact implementados
                         if (npc.canInteract(player.getPosition()))
                             currentDialogue = npc.interact();
                     }
                 }
-                // --- Ataque del jugador ---
+                // Ataque del jugador
                 if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
-                    combat.playerAttack(player.getPosition(), 60.f, 20.f);
+                    for (auto& enemy : enemies) {
+                        if (enemy.isAlive()) {
+                            sf::Vector2f diff = enemy.getPosition() - player.getPosition();
+                            if (sqrt(diff.x*diff.x + diff.y*diff.y) < 60.f)
+                                enemy.setHealth(enemy.getHealth() - 20.f);
+                            if (enemy.getHealth() <= 0) enemy.setAlive(false);
+                        }
+                    }
                 }
             }
 
+            // Pausa y salida
             else if (state == GameState::PAUSED) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Escape)
@@ -146,7 +163,7 @@ int main() {
                 }
             }
 
-            // --- Selector de misión ---
+            // Selector de misiones
             else if (state == GameState::SELECT_QUEST) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Tab)
@@ -158,12 +175,14 @@ int main() {
                 }
             }
 
-            // --- Game Over ---
+            // Game Over
             else if (state == GameState::GAME_OVER) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Enter) {
-                        player.reset(); // Debes implementar reset() en Player
-                        combat = CombatSystem(); // Reinicia enemigos
+                        player.setPosition({100, 400});
+                        player.setHealth(100.f);
+                        player.setFaith(100.f);
+                        for (auto& enemy : enemies) enemy.setAlive(true), enemy.setHealth(30.f);
                         state = GameState::MENU;
                         score = 0;
                     }
@@ -173,37 +192,35 @@ int main() {
             }
         }
 
+        // --- Cálculo del delta time ---
         float dt = clock.restart().asSeconds();
 
-        for (auto& enemy : enemies) if (enemy.isAlive()) enemy.update(dt);
-        for (auto& npc : npcs) npc.update(dt);
-
-
-        // --- Lógica de juego solo si estamos jugando ---
+        // --- Actualización de lógica del juego ---
         if (state == GameState::PLAYING) {
             player.update(dt);
-            for (auto& npc : npcs) npc.update(dt, player.getPosition());
-            combat.update(dt, player.getPosition());
+
+            for (auto& enemy : enemies)
+                if (enemy.isAlive()) enemy.update(dt);
+
+            for (auto& npc : npcs)
+                npc.update(dt);
+
             questSystem.update();
 
-            // Si el jugador muere, game over
+            // Ejemplo: Si el jugador muere, game over
             if (player.getHealth() <= 0)
                 state = GameState::GAME_OVER;
         }
 
-        // DIBUJO
-        window.clear();
-        for (auto& enemy : enemies) if (enemy.isAlive()) window.draw(enemy);
-        for (auto& npc : npcs) window.draw(npc);
-        // ...otros dibujos...
-        window.display();
+        // --- Dibujo ---
+        window.clear(sf::Color(10,10,20));
 
         if (state == GameState::MENU) {
             menu.drawMainMenu(window);
-            sf::Text saveMsg("S: Guardar partida | L: Cargar partida | O: Opciones", font, 22);
-            saveMsg.setPosition(320, 500);
-            saveMsg.setFillColor(sf::Color::White);
-            window.draw(saveMsg);
+            sf::Text auxMsg("S: Guardar | L: Cargar | O: Opciones", font, 22);
+            auxMsg.setPosition(320, 500);
+            auxMsg.setFillColor(sf::Color::White);
+            window.draw(auxMsg);
             if (showSaveNotice && noticeClock.getElapsedTime().asSeconds() < 2.f) {
                 sf::Text notice("¡Progreso guardado!", font, 28);
                 notice.setPosition(500, 600);
@@ -212,7 +229,7 @@ int main() {
             }
             if (showLoadNotice && noticeClock.getElapsedTime().asSeconds() < 2.f) {
                 sf::Text notice("¡Progreso cargado!", font, 28);
-                notice.setPosition(500, 600);
+                notice.setPosition(500, 630);
                 notice.setFillColor(sf::Color::Cyan);
                 window.draw(notice);
             }
@@ -221,9 +238,12 @@ int main() {
             optionsMenu.draw(window);
         }
         else if (state == GameState::PLAYING) {
-            level.draw(window, player, npcs);
-            combat.draw(window);
-            drawHUD(window, font, player.getHealth(), player.getMaxHealth(), player.getFaith(), player.getMaxFaith());
+            // Aquí podrías dibujar tu nivel, fondo, etc.
+            for (auto& enemy : enemies) if (enemy.isAlive()) window.draw(enemy);
+            for (auto& npc : npcs) window.draw(npc);
+            window.draw(player);
+
+            drawHUD(window, font, player.getHealth(), 100.f, player.getFaith(), 100.f);
             drawQuestHUD(window, font, questSystem);
 
             // Notificaciones de guardado/carga
@@ -235,12 +255,12 @@ int main() {
             }
             if (showLoadNotice && noticeClock.getElapsedTime().asSeconds() < 2.f) {
                 sf::Text notice("¡Progreso cargado!", font, 28);
-                notice.setPosition(500, 600);
+                notice.setPosition(500, 630);
                 notice.setFillColor(sf::Color::Cyan);
                 window.draw(notice);
             }
 
-            // Diálogo
+            // Diálogo NPC
             if (!currentDialogue.empty()) {
                 sf::RectangleShape bg({800, 60});
                 bg.setFillColor(sf::Color(0,0,0,180));
@@ -264,7 +284,6 @@ int main() {
 
         window.display();
 
-        // Quitar notificaciones tras 2 segundos
         if (noticeClock.getElapsedTime().asSeconds() > 2.f) {
             showSaveNotice = false;
             showLoadNotice = false;
