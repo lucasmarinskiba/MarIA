@@ -1,1 +1,29 @@
+# Archivos de compilación
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+/Makefile
+/*.sln
+/*.vcxproj*
+/compile_commands.json
 
+# Archivos temporales de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de usuario/IDE
+*.user
+*.idea/
+*.vscode/
+*.swp
+
+# Archivos binarios y ejecutables
+MarIA
+MarIA.exe
+
+# Archivos de guardado temporal
+*.sav
+*.tmp
+
+# Ignorar assets generados temporalmente
+assets/tmp/
