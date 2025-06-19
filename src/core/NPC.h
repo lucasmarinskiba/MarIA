@@ -20,3 +20,15 @@ private:
     size_t currentDialogue = 0;
     float interactRadius = 64.f;
 };
+
+class NPC : public AnimatedSprite {
+public:
+    NPC();
+    void init(const sf::Texture& tex, const sf::Vector2f& pos, const std::vector<std::string>& dialogues);
+    void save(std::ofstream& out) const;
+    void load(std::ifstream& in, const sf::Texture& tex);
+
+private:
+    std::vector<std::string> dialogues;
+    size_t currentDialogue = 0;
+};
