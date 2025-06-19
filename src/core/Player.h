@@ -21,3 +21,9 @@ private:
     float faith = 100.f, maxFaith = 100.f;
     float speed = 200.f;
 };
+
+// Más métodos...
+void setPosition(const sf::Vector2f& pos) { sprite.setPosition(pos); }
+void setHealth(float h) { health = h; }
+void setFaith(float f) { faith = f; }
+void reset() { setPosition({100, 400}); setHealth(maxHealth); setFaith(maxFaith); }
