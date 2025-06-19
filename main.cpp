@@ -3,6 +3,7 @@
 #include "utils/ResourceManager.h"
 #include "core/Player.h"
 #include "core/NPC.h"
+#include "core/Enemy.h"
 #include "core/Level.h"
 #include "core/CombatSystem.h"
 #include "core/QuestSystem.h"
