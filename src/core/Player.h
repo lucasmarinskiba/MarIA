@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "utils/ResourceManager.h"
+#include "core/AnimatedSprite.h"
+#include "utils/ResourceManager.h"
 
 class Player {
 public:
@@ -17,6 +19,19 @@ public:
 
 private:
     sf::Sprite sprite;
+    float health = 100.f, maxHealth = 100.f;
+    float faith = 100.f, maxFaith = 100.f;
+    float speed = 200.f;
+};
+
+class Player : public AnimatedSprite {
+public:
+    Player(ResourceManager& rm);
+
+    void update(float dt);
+    // ... tus getters/setters y stats ...
+
+private:
     float health = 100.f, maxHealth = 100.f;
     float faith = 100.f, maxFaith = 100.f;
     float speed = 200.f;
