@@ -173,7 +173,11 @@ int main() {
             }
         }
 
-        float dt = 1.f / 60.f; // Usa clock para mayor precisión si quieres
+        float dt = clock.restart().asSeconds();
+
+        for (auto& enemy : enemies) if (enemy.isAlive()) enemy.update(dt);
+        for (auto& npc : npcs) npc.update(dt);
+
 
         // --- Lógica de juego solo si estamos jugando ---
         if (state == GameState::PLAYING) {
@@ -187,8 +191,12 @@ int main() {
                 state = GameState::GAME_OVER;
         }
 
-        // --- DIBUJADO ---
-        window.clear(sf::Color(10,10,20));
+        // DIBUJO
+        window.clear();
+        for (auto& enemy : enemies) if (enemy.isAlive()) window.draw(enemy);
+        for (auto& npc : npcs) window.draw(npc);
+        // ...otros dibujos...
+        window.display();
 
         if (state == GameState::MENU) {
             menu.drawMainMenu(window);
