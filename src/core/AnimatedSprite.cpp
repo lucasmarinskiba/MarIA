@@ -1,3 +1,4 @@
+#pragma once
 #include "AnimatedSprite.h"
 
 AnimatedSprite::AnimatedSprite() : frameWidth(0), frameHeight(0), frameCount(1), frameTime(0.1f) {}
@@ -24,3 +25,20 @@ void AnimatedSprite::update(float dt) {
 void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(sprite, states);
 }
+
+class AnimatedSprite : public sf::Drawable {
+public:
+    AnimatedSprite();
+    void setTexture(const sf::Texture& texture, int frameWidth, int frameHeight, int frameCount, float frameTime);
+    void setPosition(const sf::Vector2f& p);
+    void update(float dt);
+
+    sf::Vector2f getPosition() const;
+protected:
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+private:
+    sf::Sprite sprite;
+    int frameWidth = 0, frameHeight = 0, frameCount = 1;
+    int currentFrame = 0;
+    float frameTime = 0.1f, timeSinceLast = 0.f;
+};
