@@ -22,7 +22,9 @@ int main() {
     sf::Font font = rm.loadFont("assets/fonts/pixel.ttf");
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Maria Game SFML");
     window.setFramerateLimit(60);
-
+    ResourceManager rm;
+    sf::Clock clock;
+    
     // --- Menús y pantallas ---
     Menu menu(font);
     GameOverScreen gameOverScreen(font);
@@ -34,11 +36,17 @@ int main() {
     // --- Jugador, enemigos, combate, NPCs, nivel ---
     Player player(rm);
     CombatSystem combat;
-    sf::Texture& enemyTex = rm.loadTexture("assets/textures/enemy.png");
+    sf::Texture& enemyTex = rm.loadTexture("assets/textures/enemy_sheet.png");
+    std::vector<Enemy> enemies;
+    enemies.emplace_back(); enemies.back().init(enemyTex, {700, 400});
     combat.addEnemy(Enemy(enemyTex, {700, 400}));
     combat.addEnemy(Enemy(enemyTex, {900, 500}));
     std::vector<NPC> npcs = { NPC(rm, {400, 400}, {"¡Buen trabajo derrotando enemigos!"}) };
     Level level(rm);
+
+    sf::Texture& npcTex = rm.loadTexture("assets/textures/npc_sheet.png");
+    std::vector<NPC> npcs;
+    npcs.emplace_back(); npcs.back().init(npcTex, {400, 400}, {"¡Hola!", "¡Chau!"});
 
     // --- Misiones y selector ---
     QuestSystem questSystem;
