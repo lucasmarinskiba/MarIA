@@ -19,6 +19,7 @@ public:
     void addQuest(const std::string& title, const std::string& description, std::function<bool()> checker);
     void update();
     const std::vector<Quest>& getActiveQuests() const { return activeQuests; }
+    std::vector<Quest>& getActiveQuests() { return activeQuests; }
 private:
     std::vector<Quest> activeQuests;
 };
