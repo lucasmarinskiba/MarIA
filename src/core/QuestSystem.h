@@ -8,6 +8,10 @@ struct Quest {
     std::string description;
     bool completed = false;
     std::function<bool()> checkCompletion;
+
+    // Para guardar/cargar:
+    void save(std::ofstream& out) const;
+    void load(std::ifstream& in
 };
 
 class QuestSystem {
