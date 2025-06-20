@@ -1,5 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include "utils/ResourceManager.h"
 #include "core/Player.h"
 #include "core/Enemy.h"
@@ -15,7 +18,14 @@
 #include "ui/QuestSelector.h"
 #include "core/GameState.h"
 
-// Utilidad para crear diálogos de NPCs
+// Ejemplo simple de objeto recolectable
+struct Collectible {
+    sf::Vector2f position;
+    bool picked = false;
+    Collectible(float x, float y) : position(x, y) {}
+    sf::Vector2f getPosition() const { return position; }
+};
+
 std::vector<std::string> getDefaultDialogues() {
     return {"¡Hola!", "¡Buen trabajo!", "¡Chau!"};
 }
@@ -27,39 +37,16 @@ int main() {
     ResourceManager rm;
     sf::Clock clock;
 
-    // --- Carga de fuentes y menús ---
-    sf::Font font = rm.loadFont("assets/fonts/PressStart2P-Regular.ttf");
+    // --- Cargar fuente PressStart2P-Regular ---
+    sf::Font font;
+    if (!font.loadFromFile("assets/fonts/PressStart2P-Regular.ttf")) {
+        std::cerr << "No se pudo cargar la fuente PressStart2P-Regular.ttf" << std::endl;
+        return -1;
+    }
     Menu menu(font);
     GameOverScreen gameOverScreen(font);
     OptionsMenu optionsMenu(font);
 
-    // carga audio, música 
-    sf::Music music;
-    if (!music.openFromFile("assets/music/music 1.mp3")) {
-        std::cerr << "No se pudo cargar la música." << std::endl;
-    } else {
-        music.setLoop(true); // Para que suene en bucle
-        music.play();
-    }
-
-    // Cargar buffers para cada sonido
-    sf::SoundBuffer jumpBuffer, hitBuffer, pickupBuffer;
-    if (!jumpBuffer.loadFromFile("assets/sounds/jump.wav")) {
-        std::cerr << "No se pudo cargar jump.wav" << std::endl;
-    }
-    if (!hitBuffer.loadFromFile("assets/sounds/hit.wav")) {
-        std::cerr << "No se pudo cargar hit.wav" << std::endl;
-    }
-    if (!pickupBuffer.loadFromFile("assets/sounds/pickup.wav")) {
-        std::cerr << "No se pudo cargar pickup.wav" << std::endl;
-    }
-
-    // Crear objetos sf::Sound y asociar cada buffer
-    sf::Sound jumpSound, hitSound, pickupSound;
-    jumpSound.setBuffer(jumpBuffer);
-    hitSound.setBuffer(hitBuffer);
-    pickupSound.setBuffer(pickupBuffer);
-    
     // --- Estados del juego ---
     GameState state = GameState::MENU;
 
@@ -70,7 +57,7 @@ int main() {
 
     // --- Inicialización del jugador ---
     Player player(rm);
-    player.setTexture(playerTex, 64, 64, 4, 0.13f); // 4 frames animación
+    player.setTexture(playerTex, 64, 64, 4, 0.13f);
     player.setPosition({100, 400});
 
     // --- Inicialización de enemigos animados ---
@@ -102,6 +89,41 @@ int main() {
     // --- Variables de UI ---
     std::string currentDialogue;
     int score = 0;
+
+    // --- Cargar música de fondo ---
+    sf::Music music;
+    if (!music.openFromFile("assets/music/music 1.ogg")) {
+        std::cerr << "No se pudo cargar la música de fondo." << std::endl;
+    } else {
+        music.setLoop(true);
+        music.setVolume(70); // Ajusta el volumen si quieres
+        music.play();
+    }
+
+    // --- Cargar efectos de sonido ---
+    sf::SoundBuffer jumpBuffer, hitBuffer, pickupBuffer;
+    if (!jumpBuffer.loadFromFile("assets/sounds/jump.wav")) {
+        std::cerr << "No se pudo cargar jump.wav" << std::endl;
+    }
+    if (!hitBuffer.loadFromFile("assets/sounds/hit.wav")) {
+        std::cerr << "No se pudo cargar hit.wav" << std::endl;
+    }
+    if (!pickupBuffer.loadFromFile("assets/sounds/pickup.wav")) {
+        std::cerr << "No se pudo cargar pickup.wav" << std::endl;
+    }
+    sf::Sound jumpSound, hitSound, pickupSound;
+    jumpSound.setBuffer(jumpBuffer);
+    hitSound.setBuffer(hitBuffer);
+    pickupSound.setBuffer(pickupBuffer);
+
+    // --- Ejemplo de objetos recolectables ---
+    std::vector<Collectible> collectibles;
+    collectibles.emplace_back(300, 400);
+    collectibles.emplace_back(600, 420);
+
+    // --- Control de daño para evitar múltiples sonidos por segundo ---
+    sf::Clock hitCooldownClock;
+    float hitCooldown = 0.5f; // medio segundo entre golpes
 
     // --- Bucle principal ---
     while (window.isOpen()) {
@@ -158,34 +180,28 @@ int main() {
                     else if (event.key.code == sf::Keyboard::Tab) {
                         state = GameState::SELECT_QUEST;
                     }
+                    // --- Salto: al presionar espacio y el jugador puede saltar ---
+                    else if (event.key.code == sf::Keyboard::Space) {
+                        if (player.canJump()) { // Suponiendo que tienes canJump()
+                            jumpSound.play();
+                            player.jump(); // Implementa esto según tu lógica
+                        }
+                        // Ataque del jugador a enemigos
+                        for (auto& enemy : enemies) {
+                            if (enemy.isAlive()) {
+                                sf::Vector2f diff = enemy.getPosition() - player.getPosition();
+                                if (sqrt(diff.x*diff.x + diff.y*diff.y) < 60.f)
+                                    enemy.setHealth(enemy.getHealth() - 20.f);
+                                if (enemy.getHealth() <= 0) enemy.setAlive(false);
+                            }
+                        }
+                    }
                 }
                 // Interacción con NPCs
                 if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E) {
                     for (auto& npc : npcs) {
-                        // Suponiendo que tienes canInteract y interact implementados
                         if (npc.canInteract(player.getPosition()))
                             currentDialogue = npc.interact();
-                    }
-                }
-                // Ataque del jugador
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
-                    for (auto& enemy : enemies) {
-                        if (enemy.isAlive()) {
-                            sf::Vector2f diff = enemy.getPosition() - player.getPosition();
-                            if (sqrt(diff.x*diff.x + diff.y*diff.y) < 60.f)
-                                enemy.setHealth(enemy.getHealth() - 20.f);
-                            if (enemy.getHealth() <= 0) enemy.setAlive(false);
-                        }
-                    }
-                    if (state == GameState::PLAYING && player.canJump()) {
-                        jumpSound.play();
-                        // player.jump(); // tu lógica de salto
-                    }
-                    if (/* condición de que el jugador recibe daño */) {
-                    hitSound.play();
-                    }
-                    if (/* condición de recoger objeto */) {
-                    pickupSound.play();
                     }
                 }
             }
@@ -244,9 +260,37 @@ int main() {
 
             questSystem.update();
 
-            // Ejemplo: Si el jugador muere, game over
+            // --- Ejemplo: Si el jugador muere, game over ---
             if (player.getHealth() <= 0)
                 state = GameState::GAME_OVER;
+
+            // --- SONIDO HIT: Si colisiona con un enemigo, recibe daño y suena hit ---
+            for (auto& enemy : enemies) {
+                if (enemy.isAlive()) {
+                    sf::Vector2f diff = enemy.getPosition() - player.getPosition();
+                    float distancia = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+                    if (distancia < 50.f) { // Umbral de colisión
+                        if (hitCooldownClock.getElapsedTime().asSeconds() > hitCooldown) {
+                            player.setHealth(player.getHealth() - 10.f);
+                            hitSound.play();
+                            hitCooldownClock.restart();
+                        }
+                    }
+                }
+            }
+
+            // --- SONIDO PICKUP: Si recolecta un objeto ---
+            for (auto& col : collectibles) {
+                if (!col.picked) {
+                    sf::Vector2f diff = col.getPosition() - player.getPosition();
+                    float distancia = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+                    if (distancia < 40.f) { // Umbral de recogida
+                        pickupSound.play();
+                        col.picked = true;
+                        score += 10; // Ejemplo: sumar puntos
+                    }
+                }
+            }
         }
 
         // --- Dibujo ---
@@ -279,6 +323,16 @@ int main() {
             for (auto& enemy : enemies) if (enemy.isAlive()) window.draw(enemy);
             for (auto& npc : npcs) window.draw(npc);
             window.draw(player);
+
+            // Dibuja los objetos recolectables no recogidos
+            for (auto& col : collectibles) {
+                if (!col.picked) {
+                    sf::CircleShape shape(16);
+                    shape.setFillColor(sf::Color::Yellow);
+                    shape.setPosition(col.position);
+                    window.draw(shape);
+                }
+            }
 
             drawHUD(window, font, player.getHealth(), 100.f, player.getFaith(), 100.f);
             drawQuestHUD(window, font, questSystem);
