@@ -55,6 +55,30 @@ int main() {
     sf::Texture& enemyTex = rm.loadTexture("assets/textures/enemy_sheet.png");
     sf::Texture& npcTex   = rm.loadTexture("assets/textures/npc_sheet.png");
 
+    // --- NUEVAS TEXTURAS FÁTIMA ---
+    sf::Texture& fatimaLandscapeTex = rm.loadTexture("assets/textures/fatima_landscape.jpg");
+    sf::Sprite fatimaLandscapeSprite(fatimaLandscapeTex);
+
+    sf::Texture& encinaTex = rm.loadTexture("assets/textures/encina.jpeg");
+    sf::Sprite encinaSprite(encinaTex);
+    encinaSprite.setPosition(600, 410);
+
+    sf::Texture& virgenAparicionTex = rm.loadTexture("assets/textures/virgen_aparicion.jpg");
+    sf::Sprite virgenAparicionSprite(virgenAparicionTex);
+    virgenAparicionSprite.setPosition(650, 280);
+
+    sf::Texture& luciaTex = rm.loadTexture("assets/textures/npc_lucia.png");
+    sf::Sprite luciaSprite(luciaTex);
+    luciaSprite.setPosition(580, 520);
+
+    sf::Texture& jacintaTex = rm.loadTexture("assets/textures/npc_jacinta.jpg");
+    sf::Sprite jacintaSprite(jacintaTex);
+    jacintaSprite.setPosition(680, 520);
+
+    sf::Texture& franciscoTex = rm.loadTexture("assets/textures/npc_francisco.jpg");
+    sf::Sprite franciscoSprite(franciscoTex);
+    franciscoSprite.setPosition(780, 520);
+
     // --- Inicialización del jugador ---
     Player player(rm);
     player.setTexture(playerTex, 64, 64, 4, 0.13f);
@@ -319,6 +343,14 @@ int main() {
             optionsMenu.draw(window);
         }
         else if (state == GameState::PLAYING) {
+            // DIBUJO DEL PAISAJE Y ELEMENTOS DE FÁTIMA
+            window.draw(fatimaLandscapeSprite);
+            window.draw(encinaSprite);
+            window.draw(virgenAparicionSprite);
+            window.draw(luciaSprite);
+            window.draw(jacintaSprite);
+            window.draw(franciscoSprite);
+
             // Aquí podrías dibujar tu nivel, fondo, etc.
             for (auto& enemy : enemies) if (enemy.isAlive()) window.draw(enemy);
             for (auto& npc : npcs) window.draw(npc);
