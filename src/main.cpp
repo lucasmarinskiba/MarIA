@@ -3,20 +3,20 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include "utils/ResourceManager.h"
-#include "core/Player.h"
-#include "core/Enemy.h"
-#include "core/NPC.h"
-#include "core/Level.h"
-#include "core/QuestSystem.h"
-#include "core/SaveSystem.h"
-#include "ui/Menu.h"
-#include "ui/HUD.h"
-#include "ui/GameOverScreen.h"
-#include "ui/OptionsMenu.h"
-#include "ui/QuestHUD.h"
-#include "ui/QuestSelector.h"
-#include "core/GameState.h"
+#include "ResourceManager.h"
+#include "Player.h"
+#include "Enemy.h"
+#include "NPC.h"
+#include "Level.h"
+#include "QuestSystem.h"
+#include "SaveSystem.h"
+#include "Menu.h"
+#include "HUD.h"
+#include "GameOverScreen.h"
+#include "OptionsMenu.h"
+#include "QuestHUD.h"
+#include "QuestSelector.h"
+#include "GameState.h"
 
 // Ejemplo simple de objeto recolectable
 struct Collectible {
