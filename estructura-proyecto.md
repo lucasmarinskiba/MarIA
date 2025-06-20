@@ -13,7 +13,7 @@ MarIA/
 │
 ├── src/                        # Código fuente C++
 │   ├── core/                   # Lógica central del juego
-│   │   ├── Player.h/cpp
+│   │   ├── Player.h/cpp        # todos los .h los pasé al include/
 │   │   ├── Enemy.h/cpp
 │   │   ├── NPC.h/cpp
 │   │   ├── AnimatedSprite.h/cpp
