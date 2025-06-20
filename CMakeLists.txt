@@ -10,6 +10,7 @@ file(GLOB_RECURSE HEADERS src/*.h)
 
 # Incluye el directorio de headers
 include_directories(src)
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # SFML
 find_package(SFML 2.5 COMPONENTS graphics window system audio REQUIRED)
