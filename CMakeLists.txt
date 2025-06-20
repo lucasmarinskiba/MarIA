@@ -6,16 +6,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Ruta a los archivos fuente
 file(GLOB_RECURSE SOURCES src/*.cpp)
-file(GLOB_RECURSE HEADERS src/*.h)
-
-# Incluye el directorio de headers
-include_directories(src)
-include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # SFML
 find_package(SFML 2.5 COMPONENTS graphics window system audio REQUIRED)
 
-add_executable(MarIA ${SOURCES} ${HEADERS})
+add_executable(MarIA ${SOURCES})
+
+target_include_directories(MarIA PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/core
+    ${CMAKE_SOURCE_DIR}/src/utils
+    ${CMAKE_SOURCE_DIR}/include
+)
 
 target_link_libraries(MarIA sfml-graphics sfml-window sfml-system sfml-audio)
 
