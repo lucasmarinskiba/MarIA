@@ -35,7 +35,7 @@ int main() {
 
     // carga audio, música 
     sf::Music music;
-    if (!music.openFromFile("assets/music/music 1.ogg")) {
+    if (!music.openFromFile("assets/music/music 1.mp3")) {
         std::cerr << "No se pudo cargar la música." << std::endl;
     } else {
         music.setLoop(true); // Para que suene en bucle
