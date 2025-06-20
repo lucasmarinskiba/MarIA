@@ -28,7 +28,7 @@ int main() {
     sf::Clock clock;
 
     // --- Carga de fuentes y menús ---
-    sf::Font font = rm.loadFont("assets/fonts/pixel.ttf");
+    sf::Font font = rm.loadFont("assets/fonts/PressStart2P-Regular.ttf");
     Menu menu(font);
     GameOverScreen gameOverScreen(font);
     OptionsMenu optionsMenu(font);
