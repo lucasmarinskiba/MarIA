@@ -33,6 +33,15 @@ int main() {
     GameOverScreen gameOverScreen(font);
     OptionsMenu optionsMenu(font);
 
+    // carga audio, música 
+    sf::Music music;
+    if (!music.openFromFile("assets/music/music 1.ogg")) {
+        std::cerr << "No se pudo cargar la música." << std::endl;
+    } else {
+        music.setLoop(true); // Para que suene en bucle
+        music.play();
+    }
+
     // --- Estados del juego ---
     GameState state = GameState::MENU;
 
