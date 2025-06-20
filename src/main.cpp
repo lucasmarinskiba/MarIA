@@ -42,6 +42,24 @@ int main() {
         music.play();
     }
 
+    // Cargar buffers para cada sonido
+    sf::SoundBuffer jumpBuffer, hitBuffer, pickupBuffer;
+    if (!jumpBuffer.loadFromFile("assets/sounds/jump.wav")) {
+        std::cerr << "No se pudo cargar jump.wav" << std::endl;
+    }
+    if (!hitBuffer.loadFromFile("assets/sounds/hit.wav")) {
+        std::cerr << "No se pudo cargar hit.wav" << std::endl;
+    }
+    if (!pickupBuffer.loadFromFile("assets/sounds/pickup.wav")) {
+        std::cerr << "No se pudo cargar pickup.wav" << std::endl;
+    }
+
+    // Crear objetos sf::Sound y asociar cada buffer
+    sf::Sound jumpSound, hitSound, pickupSound;
+    jumpSound.setBuffer(jumpBuffer);
+    hitSound.setBuffer(hitBuffer);
+    pickupSound.setBuffer(pickupBuffer);
+    
     // --- Estados del juego ---
     GameState state = GameState::MENU;
 
@@ -158,6 +176,16 @@ int main() {
                                 enemy.setHealth(enemy.getHealth() - 20.f);
                             if (enemy.getHealth() <= 0) enemy.setAlive(false);
                         }
+                    }
+                    if (state == GameState::PLAYING && player.canJump()) {
+                        jumpSound.play();
+                        // player.jump(); // tu lógica de salto
+                    }
+                    if (/* condición de que el jugador recibe daño */) {
+                    hitSound.play();
+                    }
+                    if (/* condición de recoger objeto */) {
+                    pickupSound.play();
                     }
                 }
             }
