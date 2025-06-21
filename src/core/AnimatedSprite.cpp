@@ -38,3 +38,7 @@ void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) con
 sf::Sprite& AnimatedSprite::getSprite() {
     return sprite; // Implementación del nuevo método
 }
+
+void AnimatedSprite::move(sf::Vector2f offset) {
+    sprite.move(offset);
+}
