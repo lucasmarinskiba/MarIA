@@ -1,5 +1,6 @@
 #include "SaveSystem.h"
-#include <fstream>
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 
 void SaveSystem::save(const Player& player, const std::vector<Enemy>& enemies, const std::vector<NPC>& npcs, const QuestSystem& quests, const std::string& file) {
     std::ofstream out(file);
