@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
-#include "utils/ResourceManager.h"
-#include "core/AnimatedSprite.h"
+#include "ResourceManager.h"
+#include "AnimatedSprite.h"
 
 class NPC {
 public:
