@@ -9,6 +9,7 @@ class NPC {
 public:
     NPC(ResourceManager& rm, const sf::Vector2f& pos, const std::vector<std::string>& dialogues);
 
+    sf::Sprite& getSprite();
     void update(float dt, const sf::Vector2f& playerPos);
     void draw(sf::RenderWindow& window);
     void setTexture(const sf::Texture& texture);
