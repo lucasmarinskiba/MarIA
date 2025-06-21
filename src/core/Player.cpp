@@ -58,8 +58,16 @@ void Player::save(std::ofstream& out) const {
 
 void Player::load(std::ifstream& in) {
     float x, y;
-    in >> x >> y >> health >> faith;
+    in >> x >> y;
     setPosition({x, y});
+    
+    in >> health >> faith;
+}
+
+void Player::reset() {
+    setPosition({100, 400});
+    health = maxHealth;
+    faith = maxFaith;
 }
 
 std::ostream& operator<<(std::ostream& os, const Player& player) {
