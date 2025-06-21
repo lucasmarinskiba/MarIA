@@ -1,4 +1,6 @@
 #include "OptionsMenu.h"
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 
 OptionsMenu::OptionsMenu(const sf::Font& font) {
     resolutions = { {1280,720}, {1600,900}, {1920,1080} };
