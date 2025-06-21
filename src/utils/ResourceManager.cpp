@@ -1,4 +1,7 @@
 #include "ResourceManager.h"
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
+
 
 sf::Texture& ResourceManager::loadTexture(const std::string& path) {
     auto& tex = textures[path];
