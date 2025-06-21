@@ -18,12 +18,13 @@ void AnimatedSprite::setPosition(const sf::Vector2f& position) {
     sprite.setPosition(position);
 }
 
-void AnimatedSprite::update(float dt) {
-    timeSinceLast += dt;
-    if (timeSinceLast > frameTime) {
+void AnimatedSprite::update(float deltaTime) {
+    elapsedTime += deltaTime;
+    if (elapsedTime >= frameDuration) {
         currentFrame = (currentFrame + 1) % frameCount;
-        sprite.setTextureRect(sf::IntRect(frameWidth * currentFrame, 0, frameWidth, frameHeight));
-        timeSinceLast = 0.f;
+        frameRect.left = currentFrame * frameWidth;
+        sprite.setTextureRect(frameRect);
+        elapsedTime = 0.f;
     }
 }
 
@@ -33,6 +34,10 @@ sf::Vector2f AnimatedSprite::getPosition() const {
 
 void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(sprite, states);
+}
+
+sf::FloatRect AnimatedSprite::getGlobalBounds() const {
+    return sprite.getGlobalBounds();
 }
 
 sf::Sprite& AnimatedSprite::getSprite() {
