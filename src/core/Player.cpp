@@ -1,5 +1,7 @@
 #include "Player.h"
 #include <SFML/Window/Keyboard.hpp>
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 
 Player::Player(ResourceManager& rm) {
     const sf::Texture& tex = rm.loadTexture("assets/textures/player_sheet.png");
