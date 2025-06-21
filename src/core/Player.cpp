@@ -54,3 +54,16 @@ void Player::load(std::ifstream& in) {
     in >> x >> y >> health >> faith;
     setPosition({x, y});
 }
+
+std::ostream& operator<<(std::ostream& os, const Player& player) {
+    os << player.getHealth() << " " << player.getFaith();
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, Player& player) {
+    float health, faith;
+    is >> health >> faith;
+    player.setHealth(health);
+    player.setFaith(faith);
+    return is;
+}
