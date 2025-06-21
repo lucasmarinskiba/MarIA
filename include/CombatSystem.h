@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "core/Player.h"
-#include "core/NPC.h"
+#include "Player.h"
+#include "NPC.h"
 
 class Enemy {
 public:
