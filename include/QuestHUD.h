@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "core/QuestSystem.h"
+#include "QuestSystem.h"
 
 inline void drawQuestHUD(sf::RenderWindow& window, const sf::Font& font, const QuestSystem& questSystem) {
     const auto& quests = questSystem.getActiveQuests();
