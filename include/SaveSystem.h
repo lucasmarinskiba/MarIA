@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "core/Player.h"
-#include "core/Enemy.h"
-#include "core/NPC.h"
-#include "core/QuestSystem.h"
+#include "Player.h"
+#include "Enemy.h"
+#include "NPC.h"
+#include "QuestSystem.h"
 
 class SaveSystem {
 public:
