@@ -1,4 +1,6 @@
 #include "AnimatedSprite.h"
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 
 AnimatedSprite::AnimatedSprite() {}
 
