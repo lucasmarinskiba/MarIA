@@ -1,11 +1,11 @@
 #include "Player.h"
+#include "AnimatedSprite.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <fstream>  // Para std::ofstream
 #include <string>   // Para std::string
 
-// En Player.cpp
 Player::Player() {
-    // Inicialización correcta
+    animatedSprite = new AnimatedSprite(); // Inicializar el sprite animado
     health = 100;
     faith = 50;
     maxHealth = 100;
@@ -13,7 +13,7 @@ Player::Player() {
 }
 
 void Player::update(sf::Time deltaTime) {
-    animatedSprite.update(deltaTime);  // Usar el miembro correcto
+    animatedSprite->update(deltaTime); // Llamar correctamente al update
 }
 
 Player::Player(ResourceManager& rm) {
@@ -37,7 +37,7 @@ void Player::update(float dt) {
 }
 
 void Player::draw(sf::RenderWindow& window) {
-    window.draw(sprite);
+    window.draw(animatedSprite->getSprite());
 }
 
 sf::Vector2f Player::getPosition() const {
