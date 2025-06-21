@@ -24,6 +24,7 @@ public:
     void setHealth(float h) { health = h; }
 
 private:
+    AnimatedSprite animatedSprite; 
     sf::Sprite sprite;
     float health = 100.f, maxHealth = 100.f;
     float faith = 100.f, maxFaith = 100.f;
