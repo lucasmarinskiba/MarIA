@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "core/QuestSystem.h"
+#include "QuestSystem.h"
 
 class QuestSelector {
 public:
