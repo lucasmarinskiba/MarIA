@@ -12,8 +12,7 @@ public:
     static bool load(Player& player, std::vector<Enemy>& enemies, const sf::Texture& enemyTex, std::vector<NPC>& npcs, const sf::Texture& npcTex, QuestSystem& quests, const std::string& file = "save.txt");
 };
 
-bool load(Player& player, std::vector<Enemy>& enemies, const sf::Texture& enemyTexture, 
-          std::vector<NPC>& npcs, const sf::Texture& npcTexture, QuestSystem& questSystem, const std::string& filename);
+bool load(Player& player, std::vector<Enemy>& enemies, const sf::Texture& enemyTexture, std::vector<NPC>& npcs, const sf::Texture& npcTexture, QuestSystem& questSystem, const std::string& filename);
 
 void save(const Player& player, const std::vector<Enemy>& enemies, 
           const std::vector<NPC>& npcs, const QuestSystem& questSystem, const std::string& filename);
