@@ -2,7 +2,7 @@
 #include <fstream>  // Para std::ofstream
 #include <string>   // Para std::string
 
-void SaveSystem::save(const Player& player, const std::vector<Enemy>& enemies, const std::vector<NPC>& npcs, const QuestSystem& quests, const std::string& file) {
+void SaveSystem::save(const Player& player, const std::vector<Enemy>& enemies, const std::vector<NPC>& npcs, const QuestSystem& questSystem, const std::string& filename){
     std::ofstream out(file);
     if (!out) return;
     player.save(out);
@@ -22,7 +22,7 @@ void SaveSystem::save(const Player& player, const std::vector<Enemy>& enemies, c
         quest.save(out);
 }
 
-bool SaveSystem::load(Player& player, std::vector<Enemy>& enemies, const sf::Texture& enemyTex, std::vector<NPC>& npcs, const sf::Texture& npcTex, QuestSystem& quests, const std::string& file) {
+bool SaveSystem::load(Player& player, std::vector<Enemy>& enemies, const sf::Texture& enemyTexture, std::vector<NPC>& npcs, const sf::Texture& npcTexture, QuestSystem& questSystem, const std::string& filename) {
     std::ifstream in(file);
     if (!in) return false;
     player.load(in);
