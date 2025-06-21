@@ -22,3 +22,8 @@ void Enemy::load(std::ifstream& in, const sf::Texture& tex) {
     health = h;
     alive = a;
 }
+
+std::ostream& operator<<(std::ostream& os, const Enemy& e) {
+    os << e.position.x << " " << e.position.y << " " << e.health;
+    return os;
+}
