@@ -1,4 +1,5 @@
 #pragma once
+class Player;  // Declaración adelantada
 #include <SFML/Graphics.hpp>
 
 class AnimatedSprite : public sf::Drawable {
