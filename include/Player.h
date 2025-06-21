@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "utils/ResourceManager.h"
-#include "core/AnimatedSprite.h"
-#include "utils/ResourceManager.h"
+#include "ResourceManager.h"
+#include "AnimatedSprite.h"
+#include "ResourceManager.h"
 
 class Player {
 public:
