@@ -1,5 +1,5 @@
 #pragma once
-#include "core/AnimatedSprite.h"
+#include "AnimatedSprite.h"
 #include <SFML/Graphics.hpp>
 
 class Enemy : public AnimatedSprite {
