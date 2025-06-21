@@ -82,7 +82,9 @@ int main() {
     franciscoSprite.setPosition(780, 520);
 
     // --- Inicialización del jugador ---
-    Player player(rm);
+    Player player(ResourceManager);
+    player.update(deltaTime);
+    window.draw(player.getSprite());
     player.setTexture(playerTex, 64, 64, 4, 0.13f);
     player.setPosition({100, 400});
 
