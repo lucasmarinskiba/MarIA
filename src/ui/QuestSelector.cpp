@@ -1,4 +1,6 @@
 #include "QuestSelector.h"
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 
 QuestSelector::QuestSelector(const sf::Font& font, const QuestSystem& qs)
     : questSystem(qs), font(font) {}
