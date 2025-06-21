@@ -16,13 +16,18 @@ void Player::update(sf::Time deltaTime) {
     animatedSprite->update(deltaTime); // Llamar correctamente al update
 }
 
-Player::Player(ResourceManager& rm) {
-    const sf::Texture& tex = rm.loadTexture("assets/textures/player_sheet.png");
-    setTexture(tex, 64, 64, 4, 0.14f); // 4 frames, 0.14s por frame
-    setPosition({100, 400});
+Player::Player(ResourceManager& rm) 
+    : AnimatedSprite(rm.getTexture("player.png")),  // Asume que AnimatedSprite recibe texture
+      health(100.f), maxHealth(100.f),
+      faith(100.f), maxFaith(100.f),
+      speed(200.f) {
+      const sf::Texture& tex = rm.loadTexture("assets/textures/player_sheet.png");
+      setTexture(tex, 64, 64, 4, 0.14f); // 4 frames, 0.14s por frame
+      setPosition({100, 400});
 }
 
 void Player::update(float dt) {
+    AnimatedSprite::update(dt);
     sf::Vector2f movement(0,0);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) movement.y -= speed * dt;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) movement.y += speed * dt;
@@ -45,6 +50,8 @@ sf::Vector2f Player::getPosition() const {
 }
 
 void Player::save(std::ofstream& out) const {
+    out << getPosition().x << " " << getPosition().y << "\n";
+    out << health << " " << faith << "\n";
     auto pos = getPosition();
     out << pos.x << ' ' << pos.y << ' ' << health << ' ' << faith << '\n';
 }
