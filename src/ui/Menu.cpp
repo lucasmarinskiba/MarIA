@@ -2,9 +2,21 @@
 #include <fstream>  // Para std::ofstream
 #include <string>   // Para std::string
 
+Menu::Menu(float width, float height) {
+    if (!font.loadFromFile("arial.ttf")) {
+        // manejar error
+    }
+    
+    // Crear texto correctamente
+    titleText.setFont(font);
+    titleText.setString("MarIA");
+    titleText.setCharacterSize(50);
+    // ... configuración adicional
+}
+
 Menu::Menu(const sf::Font& font) {
     title.setFont(font);
-    title.setString("MARIA GAME");
+    title.setString("MarIA");
     title.setCharacterSize(64);
     title.setFillColor(sf::Color::White);
     title.setPosition(340, 100);
