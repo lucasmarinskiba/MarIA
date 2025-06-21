@@ -1,9 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "core/NPC.h"
-#include "core/Player.h"
-#include "utils/ResourceManager.h"
+#include "NPC.h"
+#include "Player.h"
+#include "ResourceManager.h"
 
 class Level {
 public:
