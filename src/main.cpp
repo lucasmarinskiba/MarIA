@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 #include <iostream>
 #include <vector>
 #include <cmath>
