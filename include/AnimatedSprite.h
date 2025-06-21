@@ -8,6 +8,7 @@ public:
     AnimatedSprite();
     void update(sf::Time deltaTime);
     sf::Sprite& getSprite(); // Agregar este método
+    void move(sf::Vector2f offset);
     // ... resto del contenido ...
 };
 
