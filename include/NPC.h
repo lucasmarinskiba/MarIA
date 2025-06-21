@@ -11,6 +11,9 @@ public:
 
     void update(float dt, const sf::Vector2f& playerPos);
     void draw(sf::RenderWindow& window);
+    void setTexture(const sf::Texture& texture);
+    void setPosition(sf::Vector2f position);
+    sf::Vector2f getPosition() const;
 
     bool canInteract(const sf::Vector2f& playerPos) const;
     std::string interact();
