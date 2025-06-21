@@ -1,6 +1,14 @@
 #pragma once
-class Player;  // Declaración adelantada
 #include <SFML/Graphics.hpp>
+
+class Player;  // Declaración adelantada
+
+class AnimatedSprite {
+public:
+    void update(sf::Time deltaTime);
+    void draw(sf::RenderWindow& window);
+    // ... otras funciones ...
+};
 
 class AnimatedSprite : public sf::Drawable {
 public:
