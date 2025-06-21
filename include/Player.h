@@ -4,6 +4,9 @@
 #include "AnimatedSprite.h"
 #include "ResourceManager.h"
 
+// En Player.h
+class NPC;  // Declaración adelantada en lugar de #include "NPC.h"
+
 class Player {
 public:
     Player(ResourceManager& rm);
