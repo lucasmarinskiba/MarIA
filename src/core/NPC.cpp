@@ -5,6 +5,10 @@
 
 NPC::NPC() : currentDialogue(0), interactRadius(50.0f) {}
 
+sf::Sprite& NPC::getSprite() {
+    return sprite;
+}
+
 void NPC::setTexture(const sf::Texture& texture) {
     sprite.setTexture(texture); 
 }
