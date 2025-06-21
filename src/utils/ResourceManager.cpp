@@ -2,6 +2,20 @@
 #include <fstream>  // Para std::ofstream
 #include <string>   // Para std::string
 
+std::map<std::string, sf::Texture> ResourceManager::textures;
+
+sf::Texture& ResourceManager::getTexture(const std::string& filename) {
+    auto it = textures.find(filename);
+    if (it == textures.end()) {
+        sf::Texture texture;
+        if (!texture.loadFromFile(filename)) {
+            // Manejar error
+        }
+        textures[filename] = texture;
+        return textures[filename];
+    }
+    return it->second;
+}
 
 sf::Texture& ResourceManager::loadTexture(const std::string& path) {
     auto& tex = textures[path];
