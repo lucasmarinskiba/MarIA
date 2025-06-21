@@ -4,10 +4,16 @@
 #include <string>   // Para std::string
 
 // En Player.cpp
-Player::Player() 
-    : health(100), faith(50)  // Inicialización directa
-{
-    // ...
+Player::Player() {
+    // Inicialización correcta
+    health = 100;
+    faith = 50;
+    maxHealth = 100;
+    maxFaith = 100;
+}
+
+void Player::update(sf::Time deltaTime) {
+    animatedSprite.update(deltaTime);  // Usar el miembro correcto
 }
 
 Player::Player(ResourceManager& rm) {
