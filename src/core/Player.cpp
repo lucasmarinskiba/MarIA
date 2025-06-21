@@ -3,6 +3,13 @@
 #include <fstream>  // Para std::ofstream
 #include <string>   // Para std::string
 
+// En Player.cpp
+Player::Player() 
+    : health(100), faith(50)  // Inicialización directa
+{
+    // ...
+}
+
 Player::Player(ResourceManager& rm) {
     const sf::Texture& tex = rm.loadTexture("assets/textures/player_sheet.png");
     setTexture(tex, 64, 64, 4, 0.14f); // 4 frames, 0.14s por frame
