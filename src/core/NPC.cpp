@@ -13,8 +13,6 @@ void NPC::setPosition(sf::Vector2f position) {
     sprite.setPosition(position); // Implementación correcta
 }
 
-
-
 void NPC::save(const std::string& filename) {
     std::ofstream file(filename);
     if (file.is_open()) {
