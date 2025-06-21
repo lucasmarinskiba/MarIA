@@ -1,5 +1,6 @@
 #include "QuestSystem.h"
-#include <fstream>
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 
 void Quest::save(std::ofstream& out) const {
     out << title << '\n' << description << '\n' << completed << '\n';
