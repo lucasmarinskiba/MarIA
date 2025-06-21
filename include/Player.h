@@ -1,10 +1,38 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
+#include "AnimatedSprite.h" 
 #include "ResourceManager.h"
 class AnimatedSprite;
-#include "ResourceManager.h"
 
 class NPC;  // Declaración adelantada en lugar de #include "NPC.h"
+
+class Player : public AnimatedSprite {
+public:
+    Player(ResourceManager& rm);
+    
+    // Métodos de serialización
+    void save(std::ofstream& out) const;
+    void load(std::ifstream& in);
+    
+    void update(float dt);
+    
+    // Getters y setters
+    float getHealth() const { return health; }
+    float getMaxHealth() const { return maxHealth; }
+    float getFaith() const { return faith; }
+    float getMaxFaith() const { return maxFaith; }
+    void setHealth(float h) { health = h; }
+    void setFaith(float f) { faith = f; }
+    void reset();
+
+private:
+    float health;
+    float maxHealth;
+    float faith;
+    float maxFaith;
+    float speed;
+};
 
 class Player {
 public:
