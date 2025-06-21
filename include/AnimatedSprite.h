@@ -5,11 +5,16 @@ class Player;  // Declaración adelantada
 
 class AnimatedSprite {
 public:
-    AnimatedSprite();
-    void update(sf::Time deltaTime);
-    sf::Sprite& getSprite(); // Agregar este método
-    void move(sf::Vector2f offset);
-    // ... resto del contenido ...
+    explicit AnimatedSprite(const sf::Texture& texture);
+    
+    void update(float dt);
+    void setPosition(sf::Vector2f pos);
+    sf::Vector2f getPosition() const;
+    const sf::Sprite& getSprite() const;
+    
+private:
+    sf::Sprite sprite;
+    // ... variables de animación ...
 };
 
 class AnimatedSprite : public sf::Drawable {
