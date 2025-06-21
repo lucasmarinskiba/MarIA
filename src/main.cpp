@@ -355,7 +355,9 @@ int main() {
 
             // Aquí podrías dibujar tu nivel, fondo, etc.
             for (auto& enemy : enemies) if (enemy.isAlive()) window.draw(enemy);
-            for (auto& npc : npcs) window.draw(npc);
+            for (auto& npc : npcs) {
+                window.draw(npc.getSprite()); // Usar getSprite()
+            }
             window.draw(player);
 
             // Dibuja los objetos recolectables no recogidos
