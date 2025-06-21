@@ -5,9 +5,10 @@ class Player;  // Declaración adelantada
 
 class AnimatedSprite {
 public:
+    AnimatedSprite();
     void update(sf::Time deltaTime);
-    void draw(sf::RenderWindow& window);
-    // ... otras funciones ...
+    sf::Sprite& getSprite(); // Agregar este método
+    // ... resto del contenido ...
 };
 
 class AnimatedSprite : public sf::Drawable {
