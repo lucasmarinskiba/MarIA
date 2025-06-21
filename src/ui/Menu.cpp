@@ -8,10 +8,14 @@ Menu::Menu(float width, float height) {
     }
     
     // Crear texto correctamente
-    titleText.setFont(font);
+    titleText.setFont(*font); 
     titleText.setString("MarIA");
     titleText.setCharacterSize(50);
     // ... configuración adicional
+
+    menu[0].setFont(*font);
+    menu[0].setString("Nueva Partida");
+    
 }
 
 Menu::Menu(const sf::Font& font) {
