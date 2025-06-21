@@ -67,3 +67,11 @@ std::istream& operator>>(std::istream& is, Player& player) {
     player.setFaith(faith);
     return is;
 }
+
+sf::Sprite& Player::getSprite() {
+    return animatedSprite->getSprite();
+}
+
+Player::~Player() {
+    delete animatedSprite;  // Liberar memoria
+}
