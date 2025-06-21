@@ -3,6 +3,21 @@
 #include <fstream>  // Para std::ofstream
 #include <string>   // Para std::string
 
+NPC::NPC() : currentDialogue(0), interactRadius(50.0f) {}
+
+void NPC::setTexture(const sf::Texture& texture) {
+    sprite.setTexture(texture);
+}
+
+void NPC::save(const std::string& filename) {
+    std::ofstream file(filename);
+    if (file.is_open()) {
+        sf::Vector2f pos = sprite.getPosition();
+        file << pos.x << " " << pos.y << " " << currentDialogue;
+        file.close();
+    }
+}
+
 NPC::NPC(ResourceManager& rm, const sf::Vector2f& pos, const std::vector<std::string>& dialogues)
     : dialogues(dialogues) {
     sprite.setTexture(rm.loadTexture("assets/textures/npc.png"));
