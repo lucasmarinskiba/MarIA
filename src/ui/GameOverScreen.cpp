@@ -1,4 +1,6 @@
 #include "GameOverScreen.h"
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 
 GameOverScreen::GameOverScreen(const sf::Font& font) {
     title.setFont(font);
