@@ -1,5 +1,7 @@
 #include "NPC.h"
 #include <cmath>
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 
 NPC::NPC(ResourceManager& rm, const sf::Vector2f& pos, const std::vector<std::string>& dialogues)
     : dialogues(dialogues) {
