@@ -1,4 +1,6 @@
 #include "Menu.h"
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 
 Menu::Menu(const sf::Font& font) {
     title.setFont(font);
