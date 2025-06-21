@@ -1,10 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "ResourceManager.h"
-#include "AnimatedSprite.h"
+class AnimatedSprite;
 #include "ResourceManager.h"
 
-// En Player.h
 class NPC;  // Declaración adelantada en lugar de #include "NPC.h"
 
 class Player {
@@ -24,8 +23,7 @@ public:
     void setHealth(float h) { health = h; }
 
 private:
-    AnimatedSprite animatedSprite; 
-    sf::Sprite sprite;
+    AnimatedSprite* animatedSprite;
     float health = 100.f, maxHealth = 100.f;
     float faith = 100.f, maxFaith = 100.f;
     float speed = 200.f;
