@@ -35,4 +35,6 @@ void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) con
     target.draw(sprite, states);
 }
 
-
+sf::Sprite& AnimatedSprite::getSprite() {
+    return sprite; // Implementación del nuevo método
+}
