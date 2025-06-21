@@ -18,3 +18,6 @@ private:
     bool alive = true;
     float health = 30.f;
 };
+
+friend std::ostream& operator<<(std::ostream& os, const Enemy& e);
+friend std::istream& operator>>(std::istream& is, Enemy& e);
