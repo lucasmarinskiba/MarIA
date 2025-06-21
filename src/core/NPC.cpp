@@ -6,8 +6,14 @@
 NPC::NPC() : currentDialogue(0), interactRadius(50.0f) {}
 
 void NPC::setTexture(const sf::Texture& texture) {
-    sprite.setTexture(texture);
+    sprite.setTexture(texture); 
 }
+
+void NPC::setPosition(sf::Vector2f position) {
+    sprite.setPosition(position); // Implementación correcta
+}
+
+
 
 void NPC::save(const std::string& filename) {
     std::ofstream file(filename);
@@ -69,4 +75,8 @@ void NPC::load(std::ifstream& in, const sf::Texture& tex) {
         std::getline(in, line);
         dialogues.push_back(line);
     }
+}
+
+sf::Vector2f NPC::getPosition() const {
+    return sprite.getPosition(); // Implementación correcta
 }
