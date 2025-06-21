@@ -10,6 +10,8 @@ file(GLOB_RECURSE SOURCES src/*.cpp)
 # SFML
 find_package(SFML 2.5 COMPONENTS graphics window system audio REQUIRED)
 
+find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
+
 add_executable(MarIA ${SOURCES})
 
 target_include_directories(MarIA PRIVATE
@@ -19,7 +21,7 @@ target_include_directories(MarIA PRIVATE
     ${CMAKE_SOURCE_DIR}/include
 )
 
-target_link_libraries(MarIA sfml-graphics sfml-window sfml-system sfml-audio)
+target_link_libraries(MarIA PRIVATE sfml-graphics sfml-window sfml-system)
 
 # Para copiar assets tras la build (opcional)
 add_custom_command(TARGET MarIA POST_BUILD
