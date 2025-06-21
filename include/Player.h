@@ -15,10 +15,13 @@ public:
     void draw(sf::RenderWindow& window);
 
     sf::Vector2f getPosition() const;
+    sf::Sprite& getSprite() { return sprite; }
     float getHealth() const { return health; }
     float getMaxHealth() const { return maxHealth; }
     float getFaith() const { return faith; }
     float getMaxFaith() const { return maxFaith; }
+
+    void setHealth(float h) { health = h; }
 
 private:
     sf::Sprite sprite;
