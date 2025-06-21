@@ -276,8 +276,9 @@ int main() {
 
         // --- Actualización de lógica del juego ---
         if (state == GameState::PLAYING) {
-            player.update(dt);
-
+        
+            player.update(deltaTime.asSeconds());
+            
             for (auto& enemy : enemies)
                 if (enemy.isAlive()) enemy.update(dt);
 
