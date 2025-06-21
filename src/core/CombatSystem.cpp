@@ -1,4 +1,6 @@
 #include "CombatSystem.h"
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 #include <cmath>
 
 Enemy::Enemy(sf::Texture& tex, sf::Vector2f pos) {
