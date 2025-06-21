@@ -13,31 +13,44 @@ MarIA/
 │
 ├── src/                        # Código fuente C++
 │   ├── core/                   # Lógica central del juego
-│   │   ├── Player.h/cpp        # todos los .h los pasé al include/
-│   │   ├── Enemy.h/cpp
-│   │   ├── NPC.h/cpp
-│   │   ├── AnimatedSprite.h/cpp
-│   │   ├── Level.h/cpp
-│   │   ├── CombatSystem.h/cpp
-│   │   ├── QuestSystem.h/cpp
-│   │   ├── SaveSystem.h/cpp
-│   │   └── GameState.h
-│   │
+│   │   ├── Player.cpp        # todos los .h los pasé al include/
+│   │   ├── Enemy.cpp
+│   │   ├── NPC.cpp
+│   │   ├── AnimatedSprite.cpp
+│   │   ├── Level.cpp
+│   │   ├── CombatSystem.cpp
+│   │   ├── QuestSystem.cpp
+│   │   ├── SaveSystem.cpp
+│   │   
 │   ├── ui/                     # Interfaz de usuario, HUD, menús
-│   │   ├── HUD.h
-│   │   ├── Menu.h/cpp
-│   │   ├── GameOverScreen.h/cpp
-│   │   ├── OptionsMenu.h/cpp
-│   │   ├── QuestHUD.h
-│   │   └── QuestSelector.h/cpp
+│   │   ├── Menu.cpp
+│   │   ├── GameOverScreen.cpp
+│   │   ├── OptionsMenu.cpp
+│   │   └── QuestSelector.cpp
 │   │
 │   ├── utils/                  # Utilidades generales
-│   │   ├── ResourceManager.h/cpp
+│   │   ├── ResourceManager.cpp
 │   │   └── (otros utilitarios...)
 │   │
 │   └── main.cpp
 │
-├── include/                    # (Opcional) Headers públicos, si usas librerías externas o para instalar
+├── include/
+│   ├── Player.h
+│   ├── Enemy.h
+│   ├── NPC.h
+│   ├── AnimatedSprite.h
+│   ├── Level.h
+│   ├── CombatSystem.h
+│   ├── QuestSystem.h
+│   ├── SaveSystem.h
+│   ├── GameState.h
+│   ├── ResourceManager.h
+│   ├── HUD.h
+│   ├── Menu.h
+│   ├── GameOverScreen.h
+│   ├── OptionsMenu.h
+│   ├── QuestHUD.h
+│   └── QuestSelector.h                    # (Opcional) Headers públicos, si usas librerías externas o para instalar
 │
 ├── build/                      # (No versionar) Carpeta de compilación
 │
