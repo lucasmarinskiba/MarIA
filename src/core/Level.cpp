@@ -1,4 +1,6 @@
 #include "Level.h"
+#include <fstream>  // Para std::ofstream
+#include <string>   // Para std::string
 
 Level::Level(ResourceManager& rm) {
     background.setTexture(rm.loadTexture("assets/textures/background.png"));
