@@ -16,8 +16,8 @@ void Player::update(sf::Time deltaTime) {
     animatedSprite->update(deltaTime); // Llamar correctamente al update
 }
 
-Player::Player(ResourceManager& rm) 
-    : AnimatedSprite(rm.getTexture("player.png")),  // Asume que AnimatedSprite recibe texture
+Player::Player(ResourceManager& rm) :
+      AnimatedSprite(rm.getTexture("player.png")),  // Asume que AnimatedSprite recibe texture
       health(100.f), maxHealth(100.f),
       faith(100.f), maxFaith(100.f),
       speed(200.f) {
