@@ -1,78 +1,73 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "AnimatedSprite.h" 
+#include "AnimatedSprite.h"
 #include "ResourceManager.h"
-class AnimatedSprite;
+#include <fstream>
+#include <vector>
+#include <string>
 
-class NPC;  // Declaración adelantada en lugar de #include "NPC.h"
+// Declaración adelantada de NPC
+class NPC;
 
+/// Inventario simple
+struct Item {
+    std::string name;
+    int quantity;
+};
+
+/// Clase principal de jugador
 class Player : public AnimatedSprite {
 public:
     Player(ResourceManager& rm);
-    
-    // Métodos de serialización
+
+    // Serialización
     void save(std::ofstream& out) const;
     void load(std::ifstream& in);
-    
+
+    // Actualización y renderizado
     void update(float dt);
-    
+    void draw(sf::RenderWindow& window);
+
     // Getters y setters
     float getHealth() const { return health; }
     float getMaxHealth() const { return maxHealth; }
     float getFaith() const { return faith; }
     float getMaxFaith() const { return maxFaith; }
-    void setHealth(float h) { health = h; }
-    void setFaith(float f) { faith = f; }
+    int getLevel() const { return level; }
+    int getExperience() const { return experience; }
+    sf::Vector2f getPosition() const { return sprite.getPosition(); }
+    sf::Sprite& getSprite() { return sprite; }
+    bool isAlive() const { return alive; }
+
+    void setHealth(float h);
+    void setFaith(float f);
+    void setPosition(const sf::Vector2f& pos);
+    void addExperience(int amount);
     void reset();
 
-private:
-    float health;
-    float maxHealth;
-    float faith;
-    float maxFaith;
-    float speed;
-};
+    // Inventario
+    void addItem(const std::string& name, int quantity = 1);
+    bool hasItem(const std::string& name, int quantity = 1) const;
+    void removeItem(const std::string& name, int quantity = 1);
+    const std::vector<Item>& getInventory() const { return inventory; }
 
-class Player {
-public:
-    Player(ResourceManager& rm);
+    // Combate
+    void attack(NPC& npc);
+    void takeDamage(float amount);
 
-    void update(float dt);
-    void draw(sf::RenderWindow& window);
-
-    sf::Vector2f getPosition() const;
-    sf::Sprite& getSprite() { return sprite; }
-    float getHealth() const { return health; }
-    float getMaxHealth() const { return maxHealth; }
-    float getFaith() const { return faith; }
-    float getMaxFaith() const { return maxFaith; }
-
-    void setHealth(float h) { health = h; }
+    // Interacción
+    void interact(NPC& npc);
 
 private:
-    AnimatedSprite* animatedSprite;
-    float health = 100.f, maxHealth = 100.f;
-    float faith = 100.f, maxFaith = 100.f;
+    float health = 100.f;
+    float maxHealth = 100.f;
+    float faith = 100.f;
+    float maxFaith = 100.f;
     float speed = 200.f;
+    int experience = 0;
+    int level = 1;
+    bool alive = true;
+    std::vector<Item> inventory;
+    // Se asume que sprite es parte de AnimatedSprite
 };
-
-class Player : public AnimatedSprite {
-public:
-    Player(ResourceManager& rm);
-    void save(std::ofstream& out) const;
-    void load(std::ifstream& in);
-    void update(float dt);
-    // ... tus getters/setters y stats ...
-
-private:
-    float health = 100.f, maxHealth = 100.f;
-    float faith = 100.f, maxFaith = 100.f;
-    float speed = 200.f;
-};
-
-// Más métodos...
-void setPosition(const sf::Vector2f& pos) { sprite.setPosition(pos); }
-void setHealth(float h) { health = h; }
-void setFaith(float f) { faith = f; }
-void reset() { setPosition({100, 400}); setHealth(maxHealth); setFaith(maxFaith); }
