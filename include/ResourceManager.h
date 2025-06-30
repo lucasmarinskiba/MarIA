@@ -8,6 +8,7 @@
 
 class ResourceManager {
 public:
+    static std::map<std::string, sf::Texture> textures;  // Declaración
     static sf::Texture& getTexture(const std::string& filename);
     sf::Texture& loadTexture(const std::string& path);
     sf::Font& loadFont(const std::string& path);
