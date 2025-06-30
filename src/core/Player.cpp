@@ -20,7 +20,8 @@ Player::Player(ResourceManager& rm) :
       AnimatedSprite(rm.getTexture("player.png")),  // Asume que AnimatedSprite recibe texture
       health(100.f), maxHealth(100.f),
       faith(100.f), maxFaith(100.f),
-      speed(200.f) {
+      speed(200.f) 
+{
       const sf::Texture& tex = rm.loadTexture("assets/textures/player_sheet.png");
       setTexture(tex, 64, 64, 4, 0.14f); // 4 frames, 0.14s por frame
       setPosition({100, 400});
