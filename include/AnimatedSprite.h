@@ -5,7 +5,6 @@
 class AnimatedSprite : public sf::Drawable {
 public:
     AnimatedSprite() = default;
-    AnimatedSprite();
     void setTexture(const sf::Texture& texture, int frameWidth, int frameHeight, int frameCount, float frameTime);
     void setAnimation(const sf::Texture& texture, 
                       int frameWidth, 
