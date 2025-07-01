@@ -1,4 +1,4 @@
-# Archivos de compilación
+# Archivos de compilación y carpetas de build
 /build/
 /CMakeFiles/
 /CMakeCache.txt
@@ -11,17 +11,15 @@
 .DS_Store
 Thumbs.db
 
-# Archivos de usuario/IDE
+# Archivos de usuario/IDE y editores
 *.user
 *.idea/
 *.vscode/
 *.swp
 
-# Archivos binarios y ejecutables
+# Ejecutables generados por CMake o scripts
 MarIA
 MarIA.exe
-MariaGame
-MariaGame.exe
 
 # Archivos de guardado temporal
 *.sav
