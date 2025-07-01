@@ -7,16 +7,13 @@
 #include <vector>
 #include <string>
 
-// Declaración adelantada de NPC
 class NPC;
 
-/// Inventario simple
 struct Item {
     std::string name;
     int quantity;
 };
 
-/// Clase principal de jugador
 class Player : public AnimatedSprite {
 public:
     Player(ResourceManager& rm);
@@ -25,10 +22,10 @@ public:
     void save(std::ofstream& out) const;
     void load(std::ifstream& in);
 
-    // Actualización y renderizado
+    // Actualización
     void update(float dt);
-    void draw(sf::RenderWindow& window);
-
+    
+    // Usamos el draw de la clase base (eliminado el draw redundante)
     // Getters y setters
     float getHealth() const { return health; }
     float getMaxHealth() const { return maxHealth; }
@@ -36,13 +33,12 @@ public:
     float getMaxFaith() const { return maxFaith; }
     int getLevel() const { return level; }
     int getExperience() const { return experience; }
-    sf::Vector2f getPosition() const { return sprite.getPosition(); }
-    sf::Sprite& getSprite() { return sprite; }
+    
+    // Usamos getPosition de AnimatedSprite
     bool isAlive() const { return alive; }
 
     void setHealth(float h);
     void setFaith(float f);
-    void setPosition(const sf::Vector2f& pos);
     void addExperience(int amount);
     void reset();
 
@@ -69,5 +65,4 @@ private:
     int level = 1;
     bool alive = true;
     std::vector<Item> inventory;
-    // Se asume que sprite es parte de AnimatedSprite
 };
