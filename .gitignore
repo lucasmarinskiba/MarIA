@@ -1,4 +1,4 @@
-# Archivos de compilación y carpetas de build
+# Build artifacts
 /build/
 /CMakeFiles/
 /CMakeCache.txt
@@ -7,23 +7,35 @@
 /*.vcxproj*
 /compile_commands.json
 
-# Archivos temporales de sistema
+# System files
 .DS_Store
 Thumbs.db
+._*
 
-# Archivos de usuario/IDE y editores
+# User/IDE/editor files
 *.user
 *.idea/
 *.vscode/
 *.swp
+*.bak
+*.orig
+*~
 
-# Ejecutables generados por CMake o scripts
+# Binaries and executables
 MarIA
 MarIA.exe
 
-# Archivos de guardado temporal
+# (Opcional) All exes (if you generate many tools)
+# *.exe
+
+# Test, log, and dump files (optional)
+*.log
+*.out
+*.stackdump
+
+# Temporary and save files
 *.sav
 *.tmp
 
-# Ignorar assets generados temporalmente
+# Ignore assets generated temporarily
 assets/tmp/
