@@ -35,71 +35,45 @@ public:
                       int frameWidth, 
                       int frameHeight, 
                       int frameCount, 
-                      float frameTime) 
-    {
-        sprite.setTexture(texture);
-        this->frameWidth = frameWidth;
-        this->frameHeight = frameHeight;
-        this->frameCount = frameCount > 0 ? frameCount : 1;
-        this->frameTime = frameTime > 0.0f ? frameTime : 0.1f;
-        currentFrame = 0;
-        timeSinceLast = 0.f;
-        frameRect = sf::IntRect(0, 0, frameWidth, frameHeight);
-        sprite.setTextureRect(frameRect);
-    }
-
+                      float frameTime);
+    
     /**
      * @brief Establece la posición del sprite.
      * @param position Nueva posición.
      */
-    void setPosition(const sf::Vector2f& position) {
-        sprite.setPosition(position);
-    }
-
+    void setPosition(const sf::Vector2f& position);
+    
     /**
      * @brief Actualiza la animación en función del tiempo transcurrido.
      * @param deltaTime Tiempo transcurrido desde la última actualización (en segundos).
      */
-    void update(float deltaTime) {
-        if (frameCount <= 1) return;
-        timeSinceLast += deltaTime;
-        while (timeSinceLast >= frameTime) {
-            timeSinceLast -= frameTime;
-            currentFrame = (currentFrame + 1) % frameCount;
-            int left = currentFrame * frameWidth;
-            frameRect = sf::IntRect(left, 0, frameWidth, frameHeight);
-            sprite.setTextureRect(frameRect);
-        }
-    }
-
+    void update(float deltaTime);
+    
     /**
      * @brief Obtiene el área global del sprite.
      * @return Un sf::FloatRect con el área global.
      */
-    sf::FloatRect getGlobalBounds() const {
-        return sprite.getGlobalBounds();
-    }
-
+    sf::FloatRect getGlobalBounds() const;
+    
     /**
      * @brief Obtiene la posición actual del sprite.
      * @return sf::Vector2f con la posición.
      */
-    sf::Vector2f getPosition() const {
-        return sprite.getPosition();
-    }
+    sf::Vector2f getPosition() const;
 
 protected:
     /**
      * @brief Dibuja el sprite en el target especificado.
      */
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
-        target.draw(sprite, states);
-    }
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
     sf::Sprite sprite;
     sf::IntRect frameRect;
-    int frameWidth = 0, frameHeight = 0, frameCount = 1;
+    int frameWidth = 0;
+    int frameHeight = 0;
+    int frameCount = 1;
     int currentFrame = 0;
-    float frameTime = 0.1f, timeSinceLast = 0.f;
+    float frameTime = 0.1f;
+    float timeSinceLast = 0.f;
 };
