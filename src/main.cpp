@@ -155,6 +155,12 @@ int main() {
 
     // --- Bucle principal ---
     while (window.isOpen()) {
+        // Calcula deltaTime (tiempo entre frames)
+        float deltaTime = clock.restart().asSeconds();
+
+        // Pasa deltaTime a todas las funciones que lo necesiten
+        player.update(deltaTime);
+        
         // --- Manejo de eventos (input del usuario) ---
         sf::Event event;
         while (window.pollEvent(event)) {
