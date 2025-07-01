@@ -1,34 +1,23 @@
 #include "Player.h"
-#include "AnimatedSprite.h"
 #include <SFML/Window/Keyboard.hpp>
-#include <fstream>  // Para std::ofstream
-#include <string>   // Para std::string
+#include <fstream>
+#include <string>
+#include <algorithm>
 
-Player::Player() {
-    animatedSprite = new AnimatedSprite(); // Inicializar el sprite animado
-    health = 100;
-    faith = 50;
-    maxHealth = 100;
-    maxFaith = 100;
-}
-
-void Player::update(sf::Time deltaTime) {
-    animatedSprite->update(deltaTime); // Llamar correctamente al update
-}
-
-Player::Player(ResourceManager& rm) :
-      AnimatedSprite(rm.getTexture("player.png")),  // Asume que AnimatedSprite recibe texture
+// Constructor principal
+Player::Player(ResourceManager& rm)
+    : AnimatedSprite(rm.getTexture("player.png")),
       health(100.f), maxHealth(100.f),
       faith(100.f), maxFaith(100.f),
-      speed(200.f) 
+      speed(200.f), experience(0), level(1), alive(true)
 {
-      const sf::Texture& tex = rm.loadTexture("assets/textures/player_sheet.png");
-      setTexture(tex, 64, 64, 4, 0.14f); // 4 frames, 0.14s por frame
-      setPosition({100, 400});
+    const sf::Texture& tex = rm.loadTexture("assets/textures/player_sheet.png");
+    setTexture(tex, 64, 64, 4, 0.14f);
+    setPosition({100, 400});
 }
 
+// Actualización del jugador
 void Player::update(float dt) {
-    AnimatedSprite::update(dt);
     sf::Vector2f movement(0,0);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) movement.y -= speed * dt;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) movement.y += speed * dt;
@@ -36,58 +25,115 @@ void Player::update(float dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) movement.x += speed * dt;
     setPosition(getPosition() + movement);
 
-    // Solo animar cuando el jugador se mueve
+    // Animar solo si se mueve
     if (movement.x != 0 || movement.y != 0)
         AnimatedSprite::update(dt);
-    
+
+    // Chequear si está vivo
+    alive = (health > 0);
 }
 
-void Player::draw(sf::RenderWindow& window) {
-    window.draw(animatedSprite->getSprite());
-}
-
-sf::Vector2f Player::getPosition() const {
-    return sprite.getPosition();
-}
-
+// Serialización
 void Player::save(std::ofstream& out) const {
     out << getPosition().x << " " << getPosition().y << "\n";
     out << health << " " << faith << "\n";
-    auto pos = getPosition();
-    out << pos.x << ' ' << pos.y << ' ' << health << ' ' << faith << '\n';
+    out << experience << " " << level << "\n";
+    out << inventory.size() << "\n";
+    for (const auto& item : inventory)
+        out << item.name << " " << item.quantity << "\n";
 }
 
 void Player::load(std::ifstream& in) {
     float x, y;
     in >> x >> y;
     setPosition({x, y});
-    
     in >> health >> faith;
+    in >> experience >> level;
+    size_t invCount;
+    in >> invCount;
+    inventory.clear();
+    for (size_t i = 0; i < invCount; ++i) {
+        Item it;
+        in >> it.name >> it.quantity;
+        inventory.push_back(it);
+    }
+    alive = (health > 0);
 }
 
+// Setters
+void Player::setHealth(float h) {
+    health = std::max(0.f, std::min(h, maxHealth));
+    alive = (health > 0);
+}
+void Player::setFaith(float f) {
+    faith = std::max(0.f, std::min(f, maxFaith));
+}
+void Player::addExperience(int amount) {
+    experience += amount;
+    // Ejemplo simple de subida de nivel
+    if (experience >= 100) {
+        level++;
+        experience -= 100;
+        // Podrías mejorar atributos aquí
+    }
+}
 void Player::reset() {
     setPosition({100, 400});
     health = maxHealth;
     faith = maxFaith;
+    alive = true;
+    experience = 0;
+    level = 1;
+    inventory.clear();
 }
 
-std::ostream& operator<<(std::ostream& os, const Player& player) {
-    os << player.getHealth() << " " << player.getFaith();
-    return os;
+// Inventario
+void Player::addItem(const std::string& name, int quantity) {
+    for (auto& item : inventory) {
+        if (item.name == name) {
+            item.quantity += quantity;
+            return;
+        }
+    }
+    inventory.push_back({name, quantity});
+}
+bool Player::hasItem(const std::string& name, int quantity) const {
+    for (const auto& item : inventory) {
+        if (item.name == name && item.quantity >= quantity)
+            return true;
+    }
+    return false;
+}
+void Player::removeItem(const std::string& name, int quantity) {
+    for (auto it = inventory.begin(); it != inventory.end(); ++it) {
+        if (it->name == name) {
+            if (it->quantity > quantity) {
+                it->quantity -= quantity;
+            } else {
+                inventory.erase(it);
+            }
+            return;
+        }
+    }
 }
 
-std::istream& operator>>(std::istream& is, Player& player) {
-    float health, faith;
-    is >> health >> faith;
-    player.setHealth(health);
-    player.setFaith(faith);
-    return is;
+// Combate
+void Player::attack(NPC& npc) {
+    // Aquí iría la lógica de ataque contra NPC (debes definirla allí también)
 }
 
+void Player::takeDamage(float amount) {
+    setHealth(health - amount);
+}
+
+// Interacción
+void Player::interact(NPC& npc) {
+    // Aquí podrías llamar a métodos de NPC para diálogos, etc.
+}
+
+// Si necesitas exponer el sprite (para el main)
 sf::Sprite& Player::getSprite() {
-    return animatedSprite->getSprite();
-}
-
-Player::~Player() {
-    delete animatedSprite;  // Liberar memoria
+    // Si AnimatedSprite tiene un método para esto, úsalo directamente
+    // Aquí debes tener en AnimatedSprite: sf::Sprite sprite; protected/public
+    return AnimatedSprite::getSprite();
 }
