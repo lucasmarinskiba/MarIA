@@ -20,7 +20,7 @@ add_executable(MarIA
     src/core/AnimatedSprite.cpp
     src/ui/GameOverScreen.cpp
     src/ui/Menu.cpp
-    src/ui/Optionsmenu.cpp  # Asegúrate que el nombre coincide con el archivo real
+    src/ui/OptionsMenu.cpp  # Asegúrate que el nombre coincide con el archivo real
     src/ui/QuestSelector.cpp
     src/utils/ResourceManager.cpp
     # Agrega aquí otros archivos .cpp que tengas
