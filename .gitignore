@@ -20,6 +20,8 @@ Thumbs.db
 # Archivos binarios y ejecutables
 MarIA
 MarIA.exe
+MariaGame
+MariaGame.exe
 
 # Archivos de guardado temporal
 *.sav
